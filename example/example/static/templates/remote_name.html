@@ -1,0 +1,12 @@
+{% extends "site_base.html" %}
+
+{% block main_wrapper %}
+    <p>
+        This template is named "secondary_page.html" locally, but lives at
+        <a href="{{ STATIC_URL }}templates/remote_name.html">{{ STATIC_URL }}templates/remote_name.html</a>.
+        This allows you to name your templates sensible things in your application,
+        if you can not do so in the remote application.
+    </p>
+    <hr>
+    {% block main %}{% endblock %}
+{% endblock %}

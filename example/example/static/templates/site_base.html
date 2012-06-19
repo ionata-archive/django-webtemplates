@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+	<meta charset="utf-8">
+	<title>Test</title>
+</head>
+<body>
+	<div>
+		<h1>This template is loaded from the web</h1>
+		<p>You can view "site_base.html" raw at <a href="{{ STATIC_URL }}templates/site_base.html">{{ STATIC_URL }}templates/site_base.html</a></p>
+		<hr>
+	</div>
+
+	{% block main_wrapper %}
+		{% block main %}{% endblock %}
+	{% endblock %}
+
+	<footer>
+        <hr>
+        <nav>
+            <a href="{% url home %}">Home</a> - <a href="{% url alt %}">Alternate page</a>.
+            These links are defined using {&#8203;% url %&#8203;} tags, as you would in a
+            regular template
+        </nav>
+	</footer>
+</body>
+</html>
