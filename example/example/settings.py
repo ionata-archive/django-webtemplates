@@ -97,6 +97,7 @@ TEMPLATE_LOADERS = (
 )
 
 WEBTEMPLATES_BASE = 'http://localhost:8000/static/templates/' 
+WEBTEMPLATES_PERMANENT_CACHE = True
 WEBTEMPLATES = [
     (WEBTEMPLATES_BASE + 'site_base.html', 'site_base.html'),
     (WEBTEMPLATES_BASE + 'secondary_page.html', 'remote_name.html'),

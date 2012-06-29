@@ -94,7 +94,31 @@ Note that a ``default`` cache is required by Django, even if you do not use it.
 The local memory cache should be good enough for most applications, unless you
 define a large number of remote templates.
 
-During development, you will probably want to use the dummy cache backend, which
-does not actually cache anything.
+During development, you will probably want to use the dummy cache backend,
+``django.core.cache.backends.dummy.DummyCache``, which does not actually cache
+anything.
+
+Permanent caching
+-----------------
+
+Your templates can be cached indefinitely, in case the remote templates become
+unavailable. A fresh copy of the templates will be requested as the main cache
+expires, but if a fresh copy can not be obtained, the stale copy from the
+permanent cache will be used in its place. You can enable this by setting
+``WEBTEMPLATES_PERMANENT_CACHE`` to ``True`` in your ``settings.py``::
+
+    WEBTEMPLATES_PERMANENT_CACHE = True
+
+This is turned off by default. If you need a fall back in case the remote server
+is unavailable, you can also use the normal Django template loader hierarchy.
+If a template can not be loaded via webtemplates, the next template loader
+defined in ``TEMPLATE_LOADERS`` will be used instead.
+
+.. note:: If the remote server is not available when the template is initially
+    loaded, and you are using a non-permanent cache like MemCache or
+    LocMemCache, then there will be no permanently cached template to return.
+    The template loading will fall through to the next template loader in the
+    hierarchy. It is very important that you always create a local fall back
+    template for each of your remote templates.
 
 .. _Django caching framework: https://docs.djangoproject.com/en/dev/topics/cache/
