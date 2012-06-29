@@ -93,11 +93,14 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 
     # Set up some templates to load off the internet
-    ('webtemplates.loaders.Loader', 'http://localhost:8000/static/templates/', [
-        'site_base.html',
-        ('secondary_page.html', 'remote_name.html'),
-    ]),
+    'webtemplates.loaders.Loader',
 )
+
+WEBTEMPLATES_BASE = 'http://localhost:8000/static/templates/' 
+WEBTEMPLATES = [
+    (WEBTEMPLATES_BASE + 'site_base.html', 'site_base.html'),
+    (WEBTEMPLATES_BASE + 'secondary_page.html', 'remote_name.html'),
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

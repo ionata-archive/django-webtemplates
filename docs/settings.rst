@@ -11,33 +11,36 @@ The remote templates that you want to use must all be defined in the Django
 ``settings.py``. ``django-webtemplates`` does not have any functionality to
 automatically discover remote templates.
 
-To define remote templates, you must provide a base url where the templates
-live, and the name of all the templates you want to load::
+To define remote templates, you must provide a list of two-tuples which define
+where to find each remote template you want to load::
 
-    TEMPLATE_LOADERS += (
-        ('webtemplates.loaders.Loader', 'http://example.com/templates/', (
-            'foo.html',
-            'bar.html',
-        )),
-    )
+    WEBTEMPLATES_BASE = 'http://example.com/templates/'
+    WEBTEMPLATES = [
+        (WEBTEMPLATES_BASE + 'foo.html', 'foo.html'),
+        (WEBTEMPLATES_BASE + 'bar.html', 'bar.html'),
+    ]
+
 This will instruct ``webtemplates`` to load two templates: ``foo.html`` and
 ``bar.html``. They will be loaded from 
 ``http://example.com/templates/foo.html`` and
 ``http://example.com/templates/bar.html`` respectively. ``webtemplates`` will
 only try to load those two templates from those two locations, and nothing more.
 
+.. note::   ``WEBTEMPLATES_BASE`` is used here to stop ourselves duplicating the
+            full path of the remote template every time, but
+            ``WEBTEMPLATES_BASE`` is NOT used anywhere by ``webtemplates``.
+
 Application templates
 ---------------------
 
 Templates can be loaded from subdirectories, just like they are from the
-filesystem. This is usually done for separating app templates from one another::
+file system. This is usually done for separating app templates from one another::
 
-    TEMPLATE_LOADERS += (
-        ('webtemplates.loaders.Loader', 'http://example.com/templates/', (
-            'polls/base.html',
-            'blog/base.html',
-        )),
-    )
+    WEBTEMPLATES_BASE = 'http://example.com/templates/'
+    WEBTEMPLATES = [
+        (WEBTEMPLATES_BASE + 'polls/base.html', 'polls/base.html'),
+        (WEBTEMPLATES_BASE + 'blog/base.html', 'blog/base.html'),
+    ]
 
 This will attempt to load ``polls/base.html`` from
 ``http://example.com/templates/polls/base.html``.
@@ -48,18 +51,17 @@ Different remote and local names
 Some times, the remote application does not allow you to name things in the same
 manner you would expect of Django templates. Many frameworks remote the
 ``.html`` extension, for example, preferring to pretend everything is a
-directory and ending in ``/``. Django itself does this. To compensate, you can
-define different local and remote names for templates::
+directory and ending in ``/``. Django itself does this. The remote name of a
+webtemplate does not need to match up with the local name::
 
-    TEMPLATE_LOADERS += (
-        ('webtemplates.loaders.Loader', 'http://example.com/', (
-            ('polls/base.html', 'polls/template_for_django/'),
-            ('blog/base.html', 'blog_template_for_django/'),
-        )),
-    )
+    WEBTEMPLATES_BASE = 'http://example.com/'
+    WEBTEMPLATES = [
+        (WEBTEMPLATES_BASE + 'templates_for_django/polls/', 'polls/base.html'),
+        (WEBTEMPLATES_BASE + 'blog_template_for_django/', 'blog/base.html'),
+    ]
 
 This will attempt to load ``polls/base.html`` from
-``http://example.com/polls/template_for_django/``, and ``blog/base.html`` from
+``http://example.com/templates_for_django/polls/``, and ``blog/base.html`` from
 ``http://example.com/blog_template_for_django/``.
 
 .. _caching:

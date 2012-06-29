@@ -1,39 +1,45 @@
+"""
+A Django template loader that loads templates from a remote web site
+"""
 import requests
 
 from django.template import TemplateDoesNotExist
 from django.template.loader import BaseLoader
 from django.core import cache
-# import get_cache, InvalidCacheBackendError
+from django.conf import settings
 
 try:
-    webcache = cache.get_cache('webtemplates')
-except InvalidCacheBackendError:
-    webcache = cache.cache
+    WEBTEMPLATES = settings.WEBTEMPLATES
+except AttributeError:
+    raise AttributeError("WEBTEMPLATES must be defined in your settings.py")
+
 
 class Loader(BaseLoader):
+    """
+    Load templates for Django from a remote web site
+    """
     is_usable = True
 
-    def __init__(self, base, template_names):
-        if not isinstance(template_names, (list, tuple)):
-            raise ArgumentError("template_names should be a list or tuple, not %s" % type(template_names))
+    def __init__(self, templates=WEBTEMPLATES):
+        try:
+            self.cache = cache.get_cache('webtemplates')
+        except InvalidCacheBackendError:
+            self.cache = cache.cache
 
-        self.setup(base, template_names)
-        print "Loaded"
 
-    def setup(self, base, template_names):
-        templates = {}
-        for template in template_names:
-            print "Adding %s to the list" % (template, )
+        if not isinstance(templates, (list, tuple)):
+            raise ValueError("templates should be a list or tuple, not %s"
+                % type(templates))
+
+        self.templates = {}
+        for template in templates:
             if isinstance(template, (tuple, list)):
-                (local, remote) = template
-            elif isinstance(template, basestring):
-                local = remote = template
+                (remote, local) = template
             else:
-                raise ArgumentError("Expected string or list for template name, not %s" % type(template))
+                raise ValueError("Expected tuple for template name, not %s"
+                    % type(template))
             
-            templates[local] = base + remote
-
-        self.templates = templates
+            self.templates[local] = remote
 
     def load_template_source(self, template_name, template_dirs=None):
         # We can only load templates that have been defined
@@ -43,7 +49,7 @@ class Loader(BaseLoader):
         url = self.templates[template_name]
 
         # Try and load from the cache
-        cached = webcache.get(url)
+        cached = self.cache.get(url)
         if cached is not None:
             return (cached, url)
 
@@ -53,5 +59,5 @@ class Loader(BaseLoader):
             raise TemplateDoesNotExist(template_name)
 
         # Yay successful result! cache it a keep going
-        webcache.set(url, r.text)
+        self.cache.set(url, r.text)
         return (r.text, url)
