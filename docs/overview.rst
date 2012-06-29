@@ -56,8 +56,8 @@ exactly the same.
 Example
 =======
 
-An exmaple Django application is provided in the `example/ directory`_ in the
+An example Django application is provided in the `example/ directory`_ in the
 repository. It defined two pages that override two remote templates.
 
 .. _Git repository: http://bitbucket.org/ionata/django-webtemplates/
-.. _example/ directory: http://bitbucket.org/ionata/django-webtemplates/src/master/exmaple/
+.. _example/ directory: http://bitbucket.org/ionata/django-webtemplates/src/master/example/
