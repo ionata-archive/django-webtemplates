@@ -41,6 +41,8 @@ PERMANENT_CACHE = _get_setting('WEBTEMPLATES_PERMANENT_CACHE', False)
 # have bigger problems than your templates not being fresh!
 PERMANENT_CACHE_TIME = datetime.timedelta(days=365).total_seconds()
 
+TIMEOUT = _get_setting('WEBTEMPLATES_TIMEOUT', 3)
+
 class Loader(BaseLoader):
     """
     Load templates for Django from a remote web site
@@ -48,7 +50,7 @@ class Loader(BaseLoader):
     is_usable = True
 
     def __init__(self, webcache=WEBCACHE, templates=WEBTEMPLATES,
-        permanent=PERMANENT_CACHE):
+        permanent=PERMANENT_CACHE, timeout=TIMEOUT):
         super(Loader, self).__init__()
 
         if not isinstance(templates, (list, tuple)):
@@ -62,6 +64,7 @@ class Loader(BaseLoader):
             self.cache = webcache
 
         self.permanent = permanent
+        self.timeout = timeout
 
         self.templates = {}
         for template in templates:
@@ -90,7 +93,7 @@ class Loader(BaseLoader):
 
         # Go and get it from the internets
         try:
-            result = requests.get(url)
+            result = requests.get(url, timeout=self.timeout)
             success = result.status_code == 200
         except requests.exceptions.RequestException:
             success = False

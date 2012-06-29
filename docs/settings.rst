@@ -122,3 +122,20 @@ defined in ``TEMPLATE_LOADERS`` will be used instead.
     template for each of your remote templates.
 
 .. _Django caching framework: https://docs.djangoproject.com/en/dev/topics/cache/
+
+Request timeouts
+================
+
+By default, a request for a remote template will time out after a generous 3
+seconds. You can change this by setting the ``WEBTEMPLATES_TIMEOUT`` setting.
+This should be the number of seconds a request should last for, before timing
+out. This can be a float::
+
+    WEBTEMPLATES_TIMEOUT = 1.5 # Time out after 1.5 seconds
+
+If your remote templates are taking longer than the default 3 seconds, the
+responsiveness of your site is going to take a serious hit. You should perhaps
+consider a different to loading your templates, as your users will
+(occasionally) have to wait more than three seconds, plus the time it takes to
+process their request normally, before they get a resonse - not a nice
+situation!
