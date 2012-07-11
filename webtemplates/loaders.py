@@ -76,6 +76,14 @@ class Loader(BaseLoader):
             
             self.templates[local] = remote
 
+    def get_template_sources(self, name):
+        """
+        Return the paths searched for a template
+        """
+        if name in self.templates:
+            return [self.templates[name]]
+        return []
+
     def load_template_source(self, template_name, template_dirs=None):
         # We can only load templates that have been defined
         if template_name not in self.templates:
