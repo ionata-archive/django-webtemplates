@@ -39,7 +39,7 @@ PERMANENT_CACHE = _get_setting('WEBTEMPLATES_PERMANENT_CACHE', False)
 
 # Cache for a year. If the external source is down for longer than that, you
 # have bigger problems than your templates not being fresh!
-PERMANENT_CACHE_TIME = datetime.timedelta(days=365).total_seconds()
+PERMANENT_CACHE_TIME = 60 * 60 * 24 * 265
 
 TIMEOUT = _get_setting('WEBTEMPLATES_TIMEOUT', 3)
 
