@@ -12,7 +12,7 @@ except ImportError:
 
 setup(
     name='django-webtemplates',
-    version="0.1.1",
+    version="0.1.2",
     description='Load templates from an external web site.',
     author='Tim Heap',
     author_email='tim@ionata.com.au',
