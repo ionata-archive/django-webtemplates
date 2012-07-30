@@ -6,7 +6,8 @@ from example import views
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^$', views.home, name='home'),
     url(r'^alt$', views.alt, name='alt'),
 )

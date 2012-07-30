@@ -9,11 +9,13 @@ from django.template.loader import BaseLoader
 from django.core import cache
 from django.conf import settings
 
+
 def _make_cache_key(url, permanent=False):
     """
     Make a unique cache key from a url
     """
-    return "WebTemplate:%s:%s" % (url, {True:"p", False:"t"}[permanent])
+    return "WebTemplate:%s:%s" % (url, {True: "p", False: "t"}[permanent])
+
 
 def _get_setting(name, default):
     """
@@ -42,6 +44,7 @@ PERMANENT_CACHE = _get_setting('WEBTEMPLATES_PERMANENT_CACHE', False)
 PERMANENT_CACHE_TIME = 60 * 60 * 24 * 265
 
 TIMEOUT = _get_setting('WEBTEMPLATES_TIMEOUT', 3)
+
 
 class Loader(BaseLoader):
     """
@@ -73,7 +76,7 @@ class Loader(BaseLoader):
             else:
                 raise ValueError("Expected tuple for template name, not %s"
                     % type(template))
-            
+
             self.templates[local] = remote
 
     def get_template_sources(self, name):
@@ -108,7 +111,7 @@ class Loader(BaseLoader):
 
         # Handle failures
         if not success:
-            
+
             # Try and load something from the permanent cache
             if self.permanent:
                 cached = self.cache.get(permanent_cache_key)

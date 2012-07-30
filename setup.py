@@ -18,7 +18,7 @@ setup(
     author_email='tim@ionata.com.au',
     url='https://bitbucket.org/ionata/django-webtemplates',
     packages=['webtemplates'],
-    install_requires = ['requests'],
+    install_requires=['requests'],
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
